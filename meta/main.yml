@@ -15,8 +15,7 @@ galaxy_info:
       - xenial
 
   galaxy_tags:
-  - localtunnel
+  - wkhtml
 
-dependencies:
-- andrelohmann.nodesource
+dependencies: []
 ...
