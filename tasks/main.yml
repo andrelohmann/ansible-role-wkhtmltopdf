@@ -1,0 +1,48 @@
+---
+
+- name: APT | Update cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  changed_when: false
+
+- name: APT | Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+  - build-essential
+  - git
+  - curl
+  - xvfb
+  - libxrender1
+  - fontconfig
+
+- name: Create the wkhtmltopdf app directory.
+  file:
+    state: directory
+    path: /opt/wkhtmltopdf
+
+- name: Fetching wkhtmltopdf archive
+  get_url:
+    url: https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+    dest: /opt/wkhtmltopdf/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+    validate_certs: no
+
+- name: Install wkthtmltopdf package
+  shell: cd /opt/wkhtmltopdf; tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz; cd wkhtmltox/bin; mv wkhtmltopdf /usr/bin/wkhtmltopdf; mv wkhtmltoimage /usr/bin/wkhtmltoimage;
+
+- name: Fetching google fonts
+  git:
+    repo: https://github.com/google/fonts.git
+    dest: /opt/googlefonts
+
+- name: create google fonts target directory
+  file:
+    path: /usr/share/fonts/truetype/google-fonts
+    state: directory
+
+- name: Install google fonts
+  shell: find /opt/googlefonts/ -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts/; fc-cache -f > /dev/null;
+
+...

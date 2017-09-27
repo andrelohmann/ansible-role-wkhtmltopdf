@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: andrelohmann
+  description: ansible galaxy role to install wkhtmltopdf client generator
+  company: smartformer UG
+
+  license: MIT
+
+  min_ansible_version: 2.2
+
+  platforms:
+    - name: Ubuntu
+      versions:
+      - trusty
+      - xenial
+
+  galaxy_tags:
+  - localtunnel
+
+dependencies:
+- andrelohmann.nodesource
+...
