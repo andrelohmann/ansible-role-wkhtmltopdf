@@ -15,7 +15,7 @@ Example Playbook
 
     - hosts: wkhtmltopdf
       roles:
-         - { role: andrelohmann.ansible-role-wkhtmltopdf }
+         - { role: andrelohmann.wkhtmltopdf }
 
 License
 -------
