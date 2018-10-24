@@ -2,34 +2,38 @@
 
 - name: APT | Install dependencies
   apt:
-    name: "{{ item }}"
+    name: "{{ packages }}"
     state: latest
     dpkg_options: 'force-confnew,force-confdef'
     autoclean: yes
     autoremove: yes
     update_cache: yes
     cache_valid_time: 3600
-  with_items:
-  - build-essential
-  - git
-  - curl
-  - xvfb
-  - libxrender1
-  - fontconfig
+  vars:
+    packages:
+    - build-essential
+    - git
+    - curl
+    - xvfb
+    - libxrender1
+    - fontconfig
+    - xfonts-75dpi
 
-- name: Create the wkhtmltopdf app directory.
-  file:
-    state: directory
-    path: /opt/wkhtmltopdf
-
-- name: Fetching wkhtmltopdf archive
+- name: Download wkhtmltopdf package for Linux 32 bits
   get_url:
-    url: https://downloads.wkhtmltopdf.org/0.12/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-    dest: /opt/wkhtmltopdf/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-    validate_certs: no
+    url: "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.{{ ansible_distribution_release }}_i386.deb"
+    dest: /tmp/wkhtmltopdf.deb
+  when: "'32' in ansible_architecture and 'Linux' == ansible_system"
 
-- name: Install wkthtmltopdf package
-  shell: cd /opt/wkhtmltopdf; tar -xvf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz; cd wkhtmltox/bin; mv wkhtmltopdf /usr/bin/wkhtmltopdf; mv wkhtmltoimage /usr/bin/wkhtmltoimage;
+- name: Download wkhtmltopdf package for Linux 64 bits
+  get_url:
+    url: "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.{{ ansible_distribution_release }}_amd64.deb"
+    dest: /tmp/wkhtmltopdf.deb
+  when: "'64' in ansible_architecture and 'Linux' == ansible_system"
+
+- name: Install wkhtmltopdf
+  apt:
+    deb: "/tmp/wkhtmltopdf.deb"
 
 - name: Fetching google fonts
   git:
