@@ -15,7 +15,7 @@ Example Playbook
 
     - hosts: wkhtmltopdf
       roles:
-         - { role: andrelohmann.wkhtmltopdf }
+         - andrelohmann.wkhtmltopdf
 
 License
 -------

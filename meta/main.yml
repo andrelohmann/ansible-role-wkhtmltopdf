@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: wkhtmltopdf
   author: andrelohmann
   description: ansible galaxy role to install wkhtmltopdf client generator
   company: smartformer UG
