@@ -10,6 +10,15 @@ Requirements
 
 This role requires ubuntu.
 
+Role Variables
+--------------
+
+The default set of variables can be used to define the wkhtmltopdf version to be installed
+
+    wkhtmltopdf_patch_release: "0.12.6"
+    wkhtmltopdf_full_release: "0.12.6-1"
+    wkhtmltopdf_install_google_fonts: True
+
 Example Playbook
 ----------------
 

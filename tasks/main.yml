@@ -21,13 +21,13 @@
 
 - name: Download wkhtmltopdf package for Linux 32 bits
   get_url:
-    url: "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.{{ ansible_distribution_release }}_i386.deb"
+    url: "https://github.com/wkhtmltopdf/packaging/releases/download/{{ wkhtmltopdf_full_release }}/wkhtmltox_{{ wkhtmltopdf_full_release }}.{{ ansible_distribution_release }}_i386.deb"
     dest: /tmp/wkhtmltopdf.deb
   when: "'32' in ansible_architecture and 'Linux' == ansible_system"
 
 - name: Download wkhtmltopdf package for Linux 64 bits
   get_url:
-    url: "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.{{ ansible_distribution_release }}_amd64.deb"
+    url: "https://github.com/wkhtmltopdf/packaging/releases/download/{{ wkhtmltopdf_full_release }}/wkhtmltox_{{ wkhtmltopdf_full_release }}.{{ ansible_distribution_release }}_amd64.deb"
     dest: /tmp/wkhtmltopdf.deb
   when: "'64' in ansible_architecture and 'Linux' == ansible_system"
 
@@ -35,17 +35,21 @@
   apt:
     deb: "/tmp/wkhtmltopdf.deb"
 
-- name: Fetching google fonts
-  git:
-    repo: https://github.com/google/fonts.git
-    dest: /opt/googlefonts
+- name: install google fonts
+  block:
 
-- name: create google fonts target directory
-  file:
-    path: /usr/share/fonts/truetype/google-fonts
-    state: directory
+  - name: Fetching google fonts
+    git:
+      repo: https://github.com/google/fonts.git
+      dest: /opt/googlefonts
 
-- name: Install google fonts
-  shell: find /opt/googlefonts/ -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts/; fc-cache -f > /dev/null;
+  - name: create google fonts target directory
+    file:
+      path: /usr/share/fonts/truetype/google-fonts
+      state: directory
 
+  - name: Install google fonts
+    shell: find /opt/googlefonts/ -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts/; fc-cache -f > /dev/null;
+
+  when: wkhtmltopdf_install_google_fonts == True
 ...

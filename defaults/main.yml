@@ -1,0 +1,5 @@
+---
+wkhtmltopdf_patch_release: "0.12.6"
+wkhtmltopdf_full_release: "0.12.6-1"
+wkhtmltopdf_install_google_fonts: True
+...
