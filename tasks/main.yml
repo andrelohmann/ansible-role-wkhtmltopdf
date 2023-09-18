@@ -1,55 +1,100 @@
 ---
 
 - name: APT | Install dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ packages }}"
-    state: latest
+    state: present
     dpkg_options: 'force-confnew,force-confdef'
-    autoclean: yes
-    autoremove: yes
-    update_cache: yes
+    autoclean: true
+    autoremove: true
+    update_cache: true
     cache_valid_time: 3600
   vars:
     packages:
-    - build-essential
-    - git
+    # - build-essential
+    # - git
     - curl
-    - xvfb
-    - libxrender1
-    - fontconfig
-    - xfonts-75dpi
+    # - xvfb
+    # - libxrender1
+    # - fontconfig
+    # - xfonts-75dpi
 
-- name: Download wkhtmltopdf package for Linux 32 bits
-  get_url:
-    url: "https://github.com/wkhtmltopdf/packaging/releases/download/{{ wkhtmltopdf_full_release }}/wkhtmltox_{{ wkhtmltopdf_full_release }}.{{ ansible_distribution_release }}_i386.deb"
+- name: Setting host facts using complex arguments
+  ansible.builtin.set_fact:
+    wkhtmltopdf_full_release: "{{ wkhtmltopdf_release[ansible_distribution_release] }}"
+
+- name: Download wkhtmltopdf package for Linux arm64
+  ansible.builtin.get_url:
+    url: "https://github.com/wkhtmltopdf/packaging/releases/download/{{ wkhtmltopdf_full_release }}/wkhtmltox_{{ wkhtmltopdf_full_release }}.{{ ansible_distribution_release }}_arm64.deb"
     dest: /tmp/wkhtmltopdf.deb
-  when: "'32' in ansible_architecture and 'Linux' == ansible_system"
+    mode: '0644'
+  when: "'aarch64' in ansible_architecture and 'Linux' == ansible_system"
 
-- name: Download wkhtmltopdf package for Linux 64 bits
-  get_url:
+- name: Download wkhtmltopdf package for Linux amd64
+  ansible.builtin.get_url:
     url: "https://github.com/wkhtmltopdf/packaging/releases/download/{{ wkhtmltopdf_full_release }}/wkhtmltox_{{ wkhtmltopdf_full_release }}.{{ ansible_distribution_release }}_amd64.deb"
     dest: /tmp/wkhtmltopdf.deb
-  when: "'64' in ansible_architecture and 'Linux' == ansible_system"
+    mode: '0644'
+  when: "'x86_64' in ansible_architecture and 'Linux' == ansible_system"
 
 - name: Install wkhtmltopdf
-  apt:
+  ansible.builtin.apt:
     deb: "/tmp/wkhtmltopdf.deb"
 
-- name: install google fonts
+- name: Install google fonts
+  when: wkhtmltopdf_install_google_fonts
   block:
 
-  - name: Fetching google fonts
-    git:
-      repo: https://github.com/google/fonts.git
-      dest: /opt/googlefonts
+  - name: APT | Install dependencies
+    ansible.builtin.apt:
+      name: "{{ packages }}"
+      state: present
+      dpkg_options: 'force-confnew,force-confdef'
+      autoclean: true
+      autoremove: true
+      update_cache: true
+      cache_valid_time: 3600
+    vars:
+      packages:
+      - unzip
+      - findutils
+      # - xvfb
+      # - libxrender1
+      # - fontconfig
+      # - xfonts-75dpi
 
-  - name: create google fonts target directory
-    file:
+  - name: Fetching google fonts
+    ansible.builtin.get_url:
+      url: "https://github.com/google/fonts/archive/main.zip"
+      dest: /tmp/googlefonts.zip
+      mode: '0644'
+      force: false
+
+  - name: Create google fonts opt directory
+    ansible.builtin.file:
+      path: /opt/googlefonts
+      state: directory
+      mode: '0644'
+
+  - name: Unarchive google fonts
+    ansible.builtin.unarchive:
+      src: /tmp/googlefonts.zip
+      dest: /opt/googlefonts
+      remote_src: true
+
+  - name: Create google fonts target directory
+    ansible.builtin.file:
       path: /usr/share/fonts/truetype/google-fonts
       state: directory
+      mode: '0755'
 
   - name: Install google fonts
-    shell: find /opt/googlefonts/ -name "*.ttf" -exec sudo install -m644 {} /usr/share/fonts/truetype/google-fonts/; fc-cache -f > /dev/null;
+    ansible.builtin.shell: |
+      set -o pipefail && find /opt/googlefonts/ -name "*.ttf" |  xargs -I{} cp {} /usr/share/fonts/truetype/google-fonts/
+      chmod -R 644 /usr/share/fonts/truetype/google-fonts/*
+      fc-cache -f > /dev/null
+    args:
+      executable: /bin/bash
+      creates: /usr/share/fonts/truetype/google-fonts/*
 
-  when: wkhtmltopdf_install_google_fonts == True
 ...
