@@ -1,5 +1,7 @@
 ---
-wkhtmltopdf_patch_release: "0.12.6"
-wkhtmltopdf_full_release: "0.12.6-1"
-wkhtmltopdf_install_google_fonts: True
+wkhtmltopdf_release:
+  jammy: "0.12.6.1-2"
+  focal: "0.12.6-1"
+  bionic: "0.12.6-1"
+wkhtmltopdf_install_google_fonts: true
 ...

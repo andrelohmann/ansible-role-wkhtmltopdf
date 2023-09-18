@@ -2,19 +2,20 @@
 galaxy_info:
   role_name: wkhtmltopdf
   author: andrelohmann
+  namespace: andrelohmann
   description: ansible galaxy role to install wkhtmltopdf client generator
-  company: smartformer UG
+  company: CloudSails GmbH
 
   license: MIT
 
-  min_ansible_version: 2.7
+  min_ansible_version: "2.11"
 
   platforms:
-    - name: Ubuntu
-      versions:
-      - xenial
-      - bionic
-      - focal
+  - name: Ubuntu
+    versions:
+    - jammy
+    - focal
+    - bionic
 
   galaxy_tags:
   - wkhtml

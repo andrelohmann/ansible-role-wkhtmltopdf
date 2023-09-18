@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    # wkhtmltopdf_patch_release: "x.x.x"
+    # wkhtmltopdf_full_release: "x.x.x.x-x"
+    wkhtmltopdf_install_google_fonts: false
+  tasks:
+  - name: "Include andrelohmann.wkhtmltopdf"
+    include_role:
+      name: "andrelohmann.wkhtmltopdf"
+...
