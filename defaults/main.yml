@@ -1,7 +1,4 @@
 ---
-wkhtmltopdf_release:
-  jammy: "0.12.6.1-2"
-  focal: "0.12.6-1"
-  bionic: "0.12.6-1"
+wkhtmltopdf_tag: latest
 wkhtmltopdf_install_google_fonts: true
 ...
