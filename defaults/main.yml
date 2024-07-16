@@ -1,4 +1,3 @@
 ---
-wkhtmltopdf_tag: latest
 wkhtmltopdf_install_google_fonts: true
 ...

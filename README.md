@@ -6,9 +6,7 @@
 
 Use this role to install the wkhtmltopdf console pdf generator + the full set of googlefonts to be used inside the generated pdf documents.
 
-This version relies on the wkthmltopdf [tags](https://github.com/wkhtmltopdf/packaging/tags) and tries to fetch the latest tag or use a specific one set in the role variables.
-
-Sadly the release process of wkhtmltopdf is not very stable. At the time being, older releases of ubuntu (focal, bionic) are only supported for the ppv64 architecture on the latest tags, while even the releases are not stable maintained. If you need to select the specific release/tag for an older version of ubuntu, fetch the latest v2.x release of this module and set the wkhtmltopdf release selection as described in the readme of that version.
+wkhtmltopdf is installed from the ubuntu distribution sources.
 
 ### Requirements
 
@@ -16,9 +14,8 @@ This role requires ubuntu
 
 ### Role Variables
 
-The default set of variables can be used to define the wkhtmltopdf version to be installed
+The default set of variables can be used to decide if the whole google fonts set needs to be installed
 
-    wkhtmltopdf_tag: latest  # or set accordingly, e.g. 0.12.6.1-3
     wkhtmltopdf_install_google_fonts: true
 
 Extract the actual tag version from [here](https://github.com/wkhtmltopdf/packaging/tags).

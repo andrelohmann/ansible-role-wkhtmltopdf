@@ -3,7 +3,7 @@
   hosts: all
   vars:
     # wkhtmltopdf_tag: "x.x.x.x-x"
-    wkhtmltopdf_install_google_fonts: false
+    wkhtmltopdf_install_google_fonts: true
   tasks:
   - name: "Include andrelohmann.wkhtmltopdf"
     include_role:
