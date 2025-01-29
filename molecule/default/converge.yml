@@ -2,12 +2,12 @@
 - name: Converge
   hosts: all
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   vars:
     # wkhtmltopdf_tag: "x.x.x.x-x"
     wkhtmltopdf_install_google_fonts: true
   tasks:
-  - name: "Include andrelohmann.wkhtmltopdf"
-    include_role:
+  - name: Include andrelohmann.wkhtmltopdf
+    ansible.builtin.include_role:
       name: "andrelohmann.wkhtmltopdf"
 ...

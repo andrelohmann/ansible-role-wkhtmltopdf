@@ -12,7 +12,7 @@
       executable: /bin/bash
       creates: /tmp/google.pdf
 
-  - stat:
+  - ansible.builtin.stat:
       path: '/tmp/google.pdf'
     register: pdf_document
 
