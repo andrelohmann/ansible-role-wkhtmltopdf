@@ -12,11 +12,12 @@
       executable: /bin/bash
       creates: /tmp/google.pdf
 
-  - ansible.builtin.stat:
+  - name: Chek for the existence of /tmp/google.pdf
+    ansible.builtin.stat:
       path: '/tmp/google.pdf'
     register: pdf_document
 
-  - name: dump pdf_document
+  - name: Dump pdf_document
     ansible.builtin.debug:
       var: pdf_document
 
